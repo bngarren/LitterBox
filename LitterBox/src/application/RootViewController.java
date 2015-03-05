@@ -26,6 +26,8 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseButton;
@@ -50,6 +52,9 @@ import com.server.LBServer;
 public class RootViewController implements Initializable {
 
 	@FXML private BorderPane root;
+	@FXML private TabPane tabPane;
+	@FXML private Tab tabHome, tabEditor;
+	@FXML private BorderPane tabEditorBorderPane;
 	@FXML private ProgressIndicator progressIndicator;
 	@FXML private Accordion accordion;
 	@FXML private ListView<LiteratureHeading> listView;
@@ -93,6 +98,8 @@ public class RootViewController implements Initializable {
 		// Start off with accordion hidden
 		accordion.setVisible(false);
 
+		// Start off with the editor tab not available
+		this.tabPane.getTabs().remove(tabEditor);
 
 
 		//Create webViewSummary's context menu
@@ -118,7 +125,7 @@ public class RootViewController implements Initializable {
 					}
 				});
 
-				openHtmlEditor(saveAction, currentLiterature.getSummary());
+				openEditorTab(saveAction, currentLiterature.getSummary());
 
 			} catch (Exception e1) {
 				e1.printStackTrace();
@@ -221,8 +228,8 @@ public class RootViewController implements Initializable {
 
 	}
 
-	private void openHtmlEditor(HTMLEditorAction action, String htmlContent) throws IOException{
 
+	private void openEditorTab(HTMLEditorAction action, String htmlContent) throws IOException{
 		URL url = this.getClass().getResource("/application/HTMLEditor.fxml");
 
 		FXMLLoader loader = new FXMLLoader(url);
@@ -232,17 +239,12 @@ public class RootViewController implements Initializable {
 		// Get the controller so that we can pass it the ActionEvent for what to do when "save" is pressed
 		HTMLEditorController controller = (HTMLEditorController) loader.getController();
 
-		//String htmlStart = "<!DOCTYPE html><HTML><BODY style='font-family:arial; font-size:13px;'>";
-		//String htmlEnd = "</BODY></HTML>";
 		controller.setHtmlContent(htmlContent);
 		controller.setSaveAction(action);
 
-		Scene scene = new Scene(parent);
-		Stage stage = new Stage();
-		stage.setScene(scene);
-		stage.initStyle(StageStyle.UTILITY);
-		stage.setTitle("LitterBox - Editor");
-		stage.show();
+		this.tabPane.getTabs().add(tabEditor);
+		this.tabEditorBorderPane.setCenter(parent);
+
 
 	}
 
@@ -325,6 +327,12 @@ public class RootViewController implements Initializable {
 
 		populateAccordionWithLiteratureById(literature.getId());
 	}
+
+
+
+
+
+
 
 	@FXML
 	private void pdfLabelPaneOnDragEntered(DragEvent e){

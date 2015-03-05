@@ -9,13 +9,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.web.HTMLEditor;
-import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
 
 public class HTMLEditorController implements Initializable {
 
 	@FXML private Parent root;
-	@FXML private WebView webView;
 	@FXML private HTMLEditor htmlEditor;
 	@FXML private Label lblLiteratureTitle;
 
@@ -32,8 +29,6 @@ public class HTMLEditorController implements Initializable {
 	private void btnSaveAction(ActionEvent e){
 
 		String htmlText = removeContentEditableFlag(htmlEditor.getHtmlText());
-
-		setWebViewContent(htmlText);
 
 		saveAction.setData(htmlText);
 		Thread th = new Thread(saveAction);
@@ -57,11 +52,6 @@ public class HTMLEditorController implements Initializable {
 	}
 
 
-	private void setWebViewContent(String content){
-		WebEngine engine = this.webView.getEngine();
-		engine.loadContent(content);
-	}
-
 	public HTMLEditorAction getSaveAction() {
 
 		return saveAction;
@@ -74,7 +64,7 @@ public class HTMLEditorController implements Initializable {
 	}
 
 	public void setHtmlContent(String htmlContent){
-		setWebViewContent(htmlContent);
+
 		htmlEditor.setHtmlText(htmlContent);
 	}
 
