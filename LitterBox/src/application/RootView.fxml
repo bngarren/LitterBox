@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.web.*?>
+<?import javafx.scene.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane fx:id="root" prefHeight="768.0" prefWidth="1024.0" stylesheets="@application.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.RootViewController">
+   <top>
+      <HBox BorderPane.alignment="TOP_CENTER">
+         <children>
+            <ProgressIndicator fx:id="progressIndicator" prefHeight="25.0" prefWidth="25.0" visible="false" />
+            <Region HBox.hgrow="ALWAYS" />
+            <MenuBar style="-fx-background-color: none;">
+              <menus>
+                <Menu fx:id="menuClient" mnemonicParsing="false" text="username">
+                  <items>
+                        <MenuItem mnemonicParsing="false" onAction="#switchUserAction" text="Switch user..." />
+                    <MenuItem mnemonicParsing="false" onAction="#closeAction" text="Close" />
+                  </items>
+                     <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" preserveRatio="true">
+                           <image>
+                              <Image url="@../assets/user_icon.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                </Menu>
+              </menus>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </MenuBar>
+         </children>
+         <padding>
+            <Insets left="10.0" />
+         </padding>
+      </HBox>
+   </top>
+   <center>
+      <SplitPane dividerPositions="0.5" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <items>
+            <ListView fx:id="listView" focusTraversable="false" minWidth="300.0" />
+            <VBox minWidth="300.0">
+               <children>
+                  <Accordion fx:id="accordion" prefHeight="371.0" BorderPane.alignment="CENTER" VBox.vgrow="ALWAYS">
+                    <panes>
+                      <TitledPane animated="false" text="Summary">
+                        <content>
+                              <WebView fx:id="webViewSummary" layoutX="69.0" layoutY="65.0" minHeight="300.0" minWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="58.39999999915" AnchorPane.topAnchor="15.0" />
+                        </content>
+                      </TitledPane>
+                      <TitledPane animated="false" text="Options">
+                           <content>
+                              <HBox fillHeight="false">
+                                 <padding>
+                                    <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+                                 </padding>
+                                 <children>
+                                    <Pane onDragDone="#pdfLabelPaneOnDragDone" onDragDropped="#pdfLabelPaneOnDragDropped" onDragEntered="#pdfLabelPaneOnDragEntered" onDragExited="#pdfLabelPaneOnDragExited" onDragOver="#pdfLabelPaneOnDragOver">
+                                       <children>
+                                          <Label id="pdfLabel" fx:id="lblPDFAvailable" onMouseClicked="#lblPDFAvailableAction" prefHeight="32.0" prefWidth="150.0" text="No PDF available">
+                                             <graphic>
+                                                <ImageView>
+                                                   <image>
+                                                      <Image url="@../assets/pdf_icon_small.png" />
+                                                   </image>
+                                                </ImageView>
+                                             </graphic>
+                                             <font>
+                                                <Font name="Calibri Bold" size="12.0" />
+                                             </font>
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                             <padding>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                             </padding>
+                                          </Label>
+                                       </children>
+                                    </Pane>
+                                 </children>
+                              </HBox>
+                           </content>
+                      </TitledPane>
+                    </panes>
+                  </Accordion>
+                  <Region prefHeight="300.0" prefWidth="508.0" VBox.vgrow="ALWAYS" />
+               </children>
+            </VBox>
+         </items>
+      </SplitPane>
+   </center>
+</BorderPane>

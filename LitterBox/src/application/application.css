@@ -1,0 +1,164 @@
+.root {
+    -fx-font-family: "Arial";
+    -fx-font-size: 13.0px;
+    -fx-base: white;
+    -fx-background: #F1FFFB;
+    -fx-focus-color: #7DBFAF;
+    
+    -fx-control-inner-background: #FFFFFF;
+    -fx-inner-border: linear-gradient(to bottom, derive(-fx-color,100.0%) 0%, derive(-fx-color,1.3548387096774253%) 100%);
+    -fx-body-color: linear-gradient( to bottom, derive(-fx-color, 65.33898305084747%) 0%, derive(-fx-color, 37.389830508474574%) 50%, derive(-fx-color, 5.0%) 50.5%, derive(-fx-color, -10.0%) 100%);
+}
+
+#pdfLabel:disabled {
+	-fx-opacity: 0.8;
+}
+
+.button, .toggle-button, .choice-box {
+    -fx-background-radius: 0, 0, 1, 2;
+    -fx-padding: 5px 12px 5px 12px;
+}
+.menu-button {
+    -fx-background-radius: 0, 0, 1, 2;
+}
+.menu-button .label {
+    -fx-padding: 5px 20px 5px 12px;
+}
+.menu-button .arrow-button {
+    -fx-padding: 5px 8px 5px 0px;
+}
+.choice-box {
+    -fx-padding: 0 8px 0 0;
+}
+.choice-box .label {
+    -fx-padding: 5px 6px 5px 8px;
+}
+.choice-box .open-button {
+    -fx-padding: 1 0 0 10px;
+}
+.combo-box-base:editable .text-field, .combo-box-base .arrow-button, .combo-box .list-cell {
+    -fx-padding: 5px 8px 5px 8px;
+}
+.check-box .box {
+    -fx-padding: 0.25em;
+}
+.radio-button .radio {
+    -fx-padding: 0.333333em;
+}
+.label, .check-box, .radio-button {
+    -fx-text-fill: -fx-text-background-color;
+}
+.button, .toggle-button, .check-box .box, .radio-button .radio, .choice-box, .menu-button, .tab, .combo-box-base {
+    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+}
+.button:focused, .toggle-button:focused, .check-box:focused .box, .radio-button:focused .radio, .choice-box:focused, .menu-button:focused, .combo-box-base:focused {
+    -fx-background-insets: -1.4, 0, 1, 2;
+}
+.combo-box-base .arrow-button {
+    -fx-background-insets: 0, 1, 2;
+}
+.choice-box .label { /* Workaround for RT-20015 */
+    -fx-text-fill: -fx-text-base-color;
+}
+.menu-button .label { /* Workaround for RT-20015 */
+    -fx-text-fill: black;
+
+}
+
+.menu-item:focused, .menu:hover{
+	-fx-background-color: #EBFAF4;
+}
+
+.menu-bar {
+    -fx-background-color: #EBFAF4;
+    -fx-selection-bar: #EBFAF4;
+}
+
+
+
+
+.scroll-bar{
+ -fx-background-color: #448B83;
+ -fx-background-radius: 2em;
+ 
+
+}
+.scroll-bar:horizontal .track,
+.scroll-bar:vertical .track {
+ -fx-background-color: #EBFAF4;
+ -fx-border-color:#EBFAF4;
+ -fx-background-radius: 2em;
+
+
+}
+.scroll-bar:vertical .track-background,
+.scroll-bar:horizontal .track-background {
+ -fx-background-color: #EBFAF4;
+ -fx-background-insets: 0;
+ -fx-background-radius: 2em;
+
+}
+.scroll-bar:horizontal .thumb {
+ -fx-background-color: #EBFAF4;
+ -fx-background-insets: 4 0 4 0;
+ -fx-background-radius: 2em;
+}
+.scroll-bar:vertical .thumb {
+ -fx-background-color: #EBFAF4;
+ -fx-background-insets: 0 4 0 4;
+ -fx-background-radius: 2em;
+}
+.scroll-bar:horizontal .thumb:hover,
+.scroll-bar:vertical .thumb:hover {
+ -fx-background-color: rgb(231,231,231);
+}
+.scroll-bar:horizontal .thumb:pressed,
+.scroll-bar:vertical .thumb:pressed {
+ -fx-background-color: rgb(255,255,255);
+}
+.scroll-bar:vertical .increment-button, .scroll-bar:vertical .decrement-button {
+ -fx-background-color:transparent;
+ -fx-background-radius: 2em;
+ -fx-padding: 5;
+
+}
+.scroll-bar:horizontal .increment-button, .scroll-bar:horizontal .decrement-button {
+ -fx-background-color:transparent;
+ -fx-background-radius: 2em;
+ -fx-padding: 5;
+
+}
+.scroll-bar:horizontal .increment-arrow {
+ -fx-shape: "M 0 0 L 4 8 L 8 0 Z";
+ -fx-background-color: rgb(211,211,211);
+ -fx-padding: 0.25em;
+ -fx-rotate: -90;
+}
+.scroll-bar:vertical .increment-arrow {
+ -fx-background-color: rgb(211,211,211);
+ -fx-shape: "M 0 0 L 4 8 L 8 0 Z";
+ -fx-padding: 0.25em;
+ -fx-rotate: 0;
+}
+.scroll-bar:horizontal .decrement-arrow {
+ -fx-background-color: rgb(211,211,211);
+ -fx-shape: "M 0 0 L 4 8 L 8 0 Z";
+ -fx-padding: 0.25em;
+ -fx-rotate: 90;
+}
+.scroll-bar:vertical .decrement-arrow {
+ -fx-background-color: rgb(211,211,211);
+ -fx-shape: "M 0 0 L 4 8 L 8 0 Z";
+ -fx-padding: 0.25em;
+ -fx-rotate: -180;
+}
+.scroll-bar:vertical:focused,
+.scroll-bar:horizontal:focused {
+ -fx-background-color: #EBFAF4,rgb(96,96,96),rgb(96,96,96);
+
+}
+
+
+
+
+

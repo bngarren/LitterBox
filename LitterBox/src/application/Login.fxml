@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="240.0" prefWidth="299.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.LoginController">
+   <children>
+      <TextField fx:id="txtUsername" layoutX="72.0" layoutY="115.0" prefHeight="30.0" prefWidth="149.0" promptText="Username">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </TextField>
+      <PasswordField fx:id="txtPassword" layoutX="72.0" layoutY="150.0" onKeyPressed="#txtEnterAction" prefHeight="30.0" prefWidth="149.0" promptText="Password">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </PasswordField>
+      <Button fx:id="btnLogin" layoutX="101.0" layoutY="191.0" mnemonicParsing="false" onAction="#btnLoginAction" prefHeight="32.0" prefWidth="90.0" text="Login">
+         <font>
+            <Font name="SansSerif Regular" size="13.0" />
+         </font>
+      </Button>
+      <Label fx:id="lblMessage" alignment="CENTER" layoutX="41.0" layoutY="90.0" prefHeight="17.0" prefWidth="212.0" textFill="#bf0000" />
+      <ImageView fitHeight="87.0" fitWidth="87.0" layoutX="103.0" layoutY="3.0">
+         <image>
+            <Image url="@../assets/logo_128.png" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>
