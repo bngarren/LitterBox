@@ -171,6 +171,7 @@ public class RootViewController implements Initializable {
 
 			@Override
 			protected void succeeded() {
+				@SuppressWarnings("unused")
 				long delta = (System.nanoTime() - startTime)/1000000;
 				//System.out.printf("Task took %s ms\n", delta);
 				super.succeeded();
