@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import javafx.animation.FadeTransition;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -42,6 +43,7 @@ import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
+import javafx.util.Duration;
 import application.dialog.UploadDialogController;
 import application.dialog.UploadDialogListener;
 import application.dialog.YesNoDialogController;
@@ -63,6 +65,7 @@ public class RootViewController implements Initializable {
 	@FXML private BorderPane tabEditorBorderPane;
 	@FXML private ProgressIndicator progressIndicator;
 	@FXML private Accordion accordion;
+	@FXML private Label lblYourLiterature;
 	@FXML private ListView<LiteratureHeading> listView;
 	@FXML private Menu menuClient;
 	@FXML private Label lblUser;
@@ -83,7 +86,6 @@ public class RootViewController implements Initializable {
 	public void initialize(URL arg0, ResourceBundle arg1) {
 
 		currentLiterature = null;
-
 
 		DAOFactory litKeeperDB = DAOFactory.getInstance("lit_keeper");
 		literatureDAO = litKeeperDB.getLiteratureDAO();
@@ -255,11 +257,12 @@ public class RootViewController implements Initializable {
 		htmlEditorController.setHtmlContent(htmlContent);
 		htmlEditorController.setSaveAction(action);
 
-		this.tabPane.getTabs().add(tabEditor);
+
 		this.tabEditorBorderPane.setCenter(parent);
 		SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
 		selectionModel.select(tabEditor);
 		disableTabsExcept(this.tabPane, tabEditor);
+		openTabWithFade(tabEditor);
 
 
 	}
@@ -545,8 +548,7 @@ public class RootViewController implements Initializable {
 	private void tabEditorCloseRequested(Event e) {
 
 		if (!RootViewController.this.htmlEditorController.needsToSave()){
-			RootViewController.this.tabPane.getTabs().remove(tabEditor);
-			RootViewController.this.enableAllTabs(tabPane);
+			removeTabWithFade(tabEditor);
 			return;
 		}
 
@@ -558,14 +560,13 @@ public class RootViewController implements Initializable {
 			@Override
 			public void yes() {
 				RootViewController.this.htmlEditorController.save();
-				RootViewController.this.tabPane.getTabs().remove(tabEditor);
-				RootViewController.this.enableAllTabs(tabPane);
+				removeTabWithFade(tabEditor);
 			}
 
 			@Override
 			public void no() {
-				RootViewController.this.tabPane.getTabs().remove(tabEditor);
-				RootViewController.this.enableAllTabs(tabPane);
+				removeTabWithFade(tabEditor);
+
 			}
 		};
 
@@ -625,6 +626,30 @@ public class RootViewController implements Initializable {
 
 	}
 
+	private void removeTabWithFade(Tab tab){
+		FadeTransition ft = new FadeTransition(Duration.millis(150), tab.getContent());
+		ft.setFromValue(1.0);
+		ft.setToValue(0.0);
+		ft.setOnFinished(e -> {
+			RootViewController.this.tabPane.getTabs().remove(tab);
+			RootViewController.this.enableAllTabs(tabPane);
+			tab.getContent().setOpacity(1f);
+		});
+		ft.play();
+	}
+
+	private void openTabWithFade(Tab tab){
+		FadeTransition ft = new FadeTransition(Duration.millis(500), tab.getContent());
+		ft.setFromValue(0.0);
+		ft.setToValue(1.0);
+		ft.setOnFinished(e -> {
+
+		});
+
+		ft.play();
+		this.tabPane.getTabs().add(tab);
+	}
+
 	private void openYesNoDialog(String title, String message, YesNoDialogListener listener) throws IOException{
 
 		URL url = this.getClass().getResource("/application/dialog/YesNoDialog.fxml");
@@ -678,6 +703,8 @@ public class RootViewController implements Initializable {
 			System.err.println("Could not resolve URL to server directory for " + client.getUsername() + " at " + urlToClientDirectory);
 		}
 
+
+		lblYourLiterature.setText(this.client.getUsername() +"'s literature:");
 
 		// Fill the list view of client's literature
 		fillListView();

@@ -43,13 +43,22 @@
       </HBox>
    </top>
    <center>
-      <TabPane fx:id="tabPane">
+      <TabPane fx:id="tabPane" stylesheets="@tabPane.css">
          <tabs>
             <Tab fx:id="tabHome" closable="false" text="Home">
                <content>
                   <SplitPane dividerPositions="0.5" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                      <items>
-                        <ListView fx:id="listView" focusTraversable="false" minWidth="300.0" />
+                        <VBox>
+                           <children>
+                              <ToolBar prefWidth="200.0">
+                                <items>
+                                    <Label fx:id="lblYourLiterature" text="Your literature:" />
+                                </items>
+                              </ToolBar>
+                              <ListView fx:id="listView" focusTraversable="false" minWidth="300.0" VBox.vgrow="ALWAYS" />
+                           </children>
+                        </VBox>
                         <VBox minWidth="300.0">
                            <children>
                               <Accordion fx:id="accordion" prefHeight="371.0" BorderPane.alignment="CENTER" VBox.vgrow="ALWAYS">
