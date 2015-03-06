@@ -20,7 +20,6 @@
          <children>
             <ToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
               <items>
-                  <Button mnemonicParsing="false" onAction="#btnSaveAndCloseAction" text="Save and close" />
                 <Button mnemonicParsing="false" onAction="#btnSaveAction" text="Save" />
               </items>
             </ToolBar>

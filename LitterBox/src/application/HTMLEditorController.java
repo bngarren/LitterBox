@@ -37,13 +37,6 @@ public class HTMLEditorController implements Initializable {
 
 	}
 
-	@FXML
-	private void btnSaveAndCloseAction(ActionEvent e){
-		btnSaveAction(e);
-		root.getScene().getWindow().hide();
-
-	}
-
 	private String removeContentEditableFlag(String html){
 		if(html.contains("contenteditable=\"true\"")){
 			html=html.replace("contenteditable=\"true\"", "contenteditable=\"false\"");

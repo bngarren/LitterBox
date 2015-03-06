@@ -13,6 +13,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -26,8 +27,10 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseButton;
@@ -41,6 +44,7 @@ import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import application.dialog.UploadDialogController;
 import application.dialog.UploadDialogListener;
+import application.dialog.YesNoDialogController;
 
 import com.db.DAOFactory;
 import com.db.LiteratureDAO;
@@ -97,6 +101,9 @@ public class RootViewController implements Initializable {
 
 		// Start off with accordion hidden
 		accordion.setVisible(false);
+
+		//Tab closing policy
+		this.tabPane.setTabClosingPolicy(TabClosingPolicy.ALL_TABS);
 
 		// Start off with the editor tab not available
 		this.tabPane.getTabs().remove(tabEditor);
@@ -244,6 +251,29 @@ public class RootViewController implements Initializable {
 
 		this.tabPane.getTabs().add(tabEditor);
 		this.tabEditorBorderPane.setCenter(parent);
+		SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
+		selectionModel.select(tabEditor);
+
+
+	}
+
+	@FXML
+	private void tabEditorCloseRequested(Event e) throws IOException{
+
+		URL url = this.getClass().getResource("/application/dialog/YesNoDialog.fxml");
+
+		FXMLLoader loader = new FXMLLoader(url);
+
+		Parent parent = loader.load();
+
+		YesNoDialogController controller = (YesNoDialogController) loader.getController();
+
+		Scene scene = new Scene(parent);
+		Stage stage = new Stage();
+		stage.setScene(scene);
+		stage.initStyle(StageStyle.UTILITY);
+		stage.setTitle("Alert");
+		stage.show();
 
 
 	}

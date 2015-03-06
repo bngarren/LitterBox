@@ -101,7 +101,7 @@
                   </SplitPane>
                </content>
             </Tab>
-            <Tab fx:id="tabEditor" text="Editor">
+            <Tab fx:id="tabEditor" onCloseRequest="#tabEditorCloseRequested" text="Editor">
               <content>
                   <BorderPane fx:id="tabEditorBorderPane" layoutX="412.0" layoutY="212.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
               </content>
