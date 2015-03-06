@@ -88,7 +88,6 @@ public class LoginController implements Initializable {
 
 			controller.setClient(client);
 
-
 			Scene scene = new Scene(parent);
 			Stage stage = new Stage();
 			stage.setScene(scene);
@@ -96,6 +95,8 @@ public class LoginController implements Initializable {
 			stage.setTitle(Main.TITLE);
 
 			stage.show();
+
+			controller.setStage(stage);
 
 			Node source = (Node) e.getSource();
 			source.getScene().getWindow().hide();

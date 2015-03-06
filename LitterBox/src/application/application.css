@@ -158,6 +158,26 @@
 
 }
 
+.context-menu .menu-item .label {
+	-fx-text-fill: black;
+}
+
+.context-menu .menu-item:focused label {
+	-fx-text-fill: black;
+}
+
+
+#lblEditorMessage {
+	-fx-background-color: 
+        #C0CCC7,
+        linear-gradient(#F0FFF9, #C0CCC7),
+        linear-gradient(#527F6D, #2C7F5E),
+        linear-gradient(#84CCAF, #527F6D);
+    -fx-background-insets: 0,1,2,3;
+    -fx-background-radius: 3,2,2,2;
+    -fx-text-fill: white;
+}
+
 
 
 

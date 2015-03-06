@@ -45,6 +45,7 @@ import javafx.util.Callback;
 import application.dialog.UploadDialogController;
 import application.dialog.UploadDialogListener;
 import application.dialog.YesNoDialogController;
+import application.dialog.YesNoDialogListener;
 
 import com.db.DAOFactory;
 import com.db.LiteratureDAO;
@@ -55,6 +56,7 @@ import com.server.LBServer;
 
 public class RootViewController implements Initializable {
 
+	private Stage stage;
 	@FXML private BorderPane root;
 	@FXML private TabPane tabPane;
 	@FXML private Tab tabHome, tabEditor;
@@ -75,16 +77,16 @@ public class RootViewController implements Initializable {
 	private LiteratureDAO literatureDAO;
 
 	private Literature currentLiterature;
+	private HTMLEditorController htmlEditorController;
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 
 		currentLiterature = null;
 
+
 		DAOFactory litKeeperDB = DAOFactory.getInstance("lit_keeper");
 		literatureDAO = litKeeperDB.getLiteratureDAO();
-
-
 
 		// Set the listView's cell factory, i.e. how each cell is displayed
 		listView.setCellFactory((Callback<ListView<LiteratureHeading>, ListCell<LiteratureHeading>>) callback -> {
@@ -235,6 +237,11 @@ public class RootViewController implements Initializable {
 
 	}
 
+	private void selectHomeTab(){
+		SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
+		selectionModel.select(tabHome);
+	}
+
 
 	private void openEditorTab(HTMLEditorAction action, String htmlContent) throws IOException{
 		URL url = this.getClass().getResource("/application/HTMLEditor.fxml");
@@ -243,40 +250,46 @@ public class RootViewController implements Initializable {
 
 		Parent parent = loader.load();
 
-		// Get the controller so that we can pass it the ActionEvent for what to do when "save" is pressed
-		HTMLEditorController controller = (HTMLEditorController) loader.getController();
+		htmlEditorController = (HTMLEditorController) loader.getController();
 
-		controller.setHtmlContent(htmlContent);
-		controller.setSaveAction(action);
+		htmlEditorController.setHtmlContent(htmlContent);
+		htmlEditorController.setSaveAction(action);
 
 		this.tabPane.getTabs().add(tabEditor);
 		this.tabEditorBorderPane.setCenter(parent);
 		SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
 		selectionModel.select(tabEditor);
+		disableTabsExcept(this.tabPane, tabEditor);
 
 
 	}
+
+	private void disableTabsExcept(TabPane tp, Tab tab){
+		ObservableList<Tab> tabs = tp.getTabs();
+		for (Tab t : tabs){
+			if (!(t == tab)){
+				t.disableProperty().set(true);
+			}
+		}
+	}
+
+	private void enableAllTabs(TabPane tp){
+		ObservableList<Tab> tabs = tp.getTabs();
+		for (Tab t : tabs){
+			t.disableProperty().set(false);
+		}
+		selectHomeTab();
+	}
+
+
 
 	@FXML
-	private void tabEditorCloseRequested(Event e) throws IOException{
-
-		URL url = this.getClass().getResource("/application/dialog/YesNoDialog.fxml");
-
-		FXMLLoader loader = new FXMLLoader(url);
-
-		Parent parent = loader.load();
-
-		YesNoDialogController controller = (YesNoDialogController) loader.getController();
-
-		Scene scene = new Scene(parent);
-		Stage stage = new Stage();
-		stage.setScene(scene);
-		stage.initStyle(StageStyle.UTILITY);
-		stage.setTitle("Alert");
-		stage.show();
+	private void tabEditorSelectionChanged(Event e){
 
 
 	}
+
+
 
 	private void openFileUploadDialog(Literature literature, File file) throws IOException{
 
@@ -464,12 +477,6 @@ public class RootViewController implements Initializable {
 	}
 
 
-	@FXML
-	private void switchUserAction(ActionEvent e) throws IOException{
-		Main.createAndShowLogin(this, new Stage());
-
-		this.root.getScene().getWindow().hide();
-	}
 
 	@FXML
 	private void closeAction(ActionEvent e){
@@ -496,6 +503,157 @@ public class RootViewController implements Initializable {
 		}
 	}
 
+	/*
+	 * This section defines methods to handle various closing events that need to prompt a Save dialog before continuing
+	 * i.e. closing window, closing editor tab, switching users, etc.
+	 */////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	private void setStageCloseRequest(){
+		stage.setOnCloseRequest(e -> {
+
+			// Check to see if editor tab is open because we will need to ask to save
+			SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
+			if (selectionModel.getSelectedItem().equals(tabEditor) && RootViewController.this.htmlEditorController.needsToSave()){
+				e.consume();
+
+				YesNoDialogListener listener = new YesNoDialogListener() {
+
+					@Override
+					public void yes() {
+						RootViewController.this.htmlEditorController.save();
+						Platform.exit();
+					}
+
+					@Override
+					public void no() {
+						RootViewController.this.tabPane.getTabs().remove(tabEditor);
+						Platform.exit();
+					}
+				};
+
+				try {
+					openYesNoDialog("Alert", "Would you like to save before closing " + Main.TITLE + "?", listener);
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
+
+		});
+	}
+
+	@FXML
+	private void tabEditorCloseRequested(Event e) {
+
+		if (!RootViewController.this.htmlEditorController.needsToSave()){
+			RootViewController.this.tabPane.getTabs().remove(tabEditor);
+			RootViewController.this.enableAllTabs(tabPane);
+			return;
+		}
+
+
+		e.consume();
+
+		YesNoDialogListener listener = new YesNoDialogListener() {
+
+			@Override
+			public void yes() {
+				RootViewController.this.htmlEditorController.save();
+				RootViewController.this.tabPane.getTabs().remove(tabEditor);
+				RootViewController.this.enableAllTabs(tabPane);
+			}
+
+			@Override
+			public void no() {
+				RootViewController.this.tabPane.getTabs().remove(tabEditor);
+				RootViewController.this.enableAllTabs(tabPane);
+			}
+		};
+
+		try {
+			openYesNoDialog("Alert", "Would you like to save before closing editor?", listener);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+	}
+
+	@FXML
+	private void switchUserAction(ActionEvent e) throws IOException{
+
+		// Check to see if editor tab is open because we will need to ask to save
+		SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
+		if (selectionModel.getSelectedItem().equals(tabEditor) && RootViewController.this.htmlEditorController.needsToSave()){
+			e.consume();
+
+			YesNoDialogListener listener = new YesNoDialogListener() {
+
+				@Override
+				public void yes() {
+					RootViewController.this.htmlEditorController.save();
+					try {
+						Main.createAndShowLogin(this, new Stage());
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					RootViewController.this.root.getScene().getWindow().hide();
+				}
+
+				@Override
+				public void no() {
+					try {
+						Main.createAndShowLogin(this, new Stage());
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					RootViewController.this.root.getScene().getWindow().hide();
+				}
+			};
+
+			try {
+				openYesNoDialog("Alert", "Would you like to save before switching users?", listener);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		} else {
+			try {
+				Main.createAndShowLogin(this, new Stage());
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+
+			RootViewController.this.root.getScene().getWindow().hide();
+		}
+
+	}
+
+	private void openYesNoDialog(String title, String message, YesNoDialogListener listener) throws IOException{
+
+		URL url = this.getClass().getResource("/application/dialog/YesNoDialog.fxml");
+
+		FXMLLoader loader = new FXMLLoader(url);
+
+		Parent parent = loader.load();
+
+		final YesNoDialogController controller = (YesNoDialogController) loader.getController();
+		controller.setMessage(message);
+		controller.setListener(listener);
+
+		Scene scene = new Scene(parent);
+		Stage stage = new Stage();
+		stage.setScene(scene);
+		stage.initStyle(StageStyle.UTILITY);
+		stage.setTitle(title);
+		stage.show();
+	}
+
+
+	public Stage getStage() {
+		return stage;
+	}
+
+	public void setStage(Stage stage) {
+		this.stage = stage;
+		setStageCloseRequest();
+	}
 
 	public Client getClient() {
 		return client;
@@ -528,6 +686,7 @@ public class RootViewController implements Initializable {
 		// Update user label
 		this.menuClient.setText(client.getUsername());
 	}
+
 
 
 
