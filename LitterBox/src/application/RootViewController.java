@@ -60,9 +60,14 @@ public class RootViewController implements Initializable {
 
 	private Stage stage;
 	@FXML private BorderPane root;
+
+	// Tab system
 	@FXML private TabPane tabPane;
-	@FXML private Tab tabHome, tabEditor;
+	@FXML private Tab tabHome, tabEditor, tabNewLiterature;
 	@FXML private BorderPane tabEditorBorderPane;
+	@FXML private BorderPane tabNewLiteratureBorderPane;
+
+
 	@FXML private ProgressIndicator progressIndicator;
 	@FXML private Accordion accordion;
 	@FXML private Label lblYourLiterature;
@@ -80,7 +85,10 @@ public class RootViewController implements Initializable {
 	private LiteratureDAO literatureDAO;
 
 	private Literature currentLiterature;
+
+	// Fields for controllers
 	private HTMLEditorController htmlEditorController;
+	private NewLiteratureController newLiteratureController;
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -111,6 +119,8 @@ public class RootViewController implements Initializable {
 
 		// Start off with the editor tab not available
 		this.tabPane.getTabs().remove(tabEditor);
+		// and new literature tab as well
+		this.tabPane.getTabs().remove(tabNewLiterature);
 
 
 		//Create webViewSummary's context menu
@@ -239,11 +249,8 @@ public class RootViewController implements Initializable {
 
 	}
 
-	private void selectHomeTab(){
-		SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
-		selectionModel.select(tabHome);
-	}
 
+	// Tabs ------------------------------------------------------------------------------------------------------------
 
 	private void openEditorTab(HTMLEditorAction action, String htmlContent) throws IOException{
 		URL url = this.getClass().getResource("/application/HTMLEditor.fxml");
@@ -259,12 +266,31 @@ public class RootViewController implements Initializable {
 
 
 		this.tabEditorBorderPane.setCenter(parent);
-		SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
-		selectionModel.select(tabEditor);
-		disableTabsExcept(this.tabPane, tabEditor);
-		openTabWithFade(tabEditor);
+
+		showTabinTabPane(this.tabPane, this.tabEditor);
 
 
+	}
+
+	private void openNewLiteratureTab() throws IOException{
+		URL url = this.getClass().getResource("/application/NewLiterature.fxml");
+
+		FXMLLoader loader = new FXMLLoader(url);
+
+		Parent parent = loader.load();
+
+		newLiteratureController = (NewLiteratureController) loader.getController();
+
+		this.tabNewLiteratureBorderPane.setCenter(parent);
+
+		showTabinTabPane(this.tabPane, this.tabNewLiterature);
+	}
+
+	private void showTabinTabPane(TabPane tp, Tab tab){
+		SingleSelectionModel<Tab> selectionModel = tp.getSelectionModel();
+		selectionModel.select(tab);
+		disableTabsExcept(tp, tab);
+		openTabWithFade(tab);
 	}
 
 	private void disableTabsExcept(TabPane tp, Tab tab){
@@ -284,6 +310,28 @@ public class RootViewController implements Initializable {
 		selectHomeTab();
 	}
 
+	private void openTabWithFade(Tab tab){
+		FadeTransition ft = new FadeTransition(Duration.millis(500), tab.getContent());
+		ft.setFromValue(0.0);
+		ft.setToValue(1.0);
+		ft.setOnFinished(e -> {
+
+		});
+
+		ft.play();
+		this.tabPane.getTabs().add(tab);
+	}
+
+	private void selectHomeTab(){
+		SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
+		selectionModel.select(tabHome);
+	}
+
+	@FXML
+	private void btnNewLiteratureAction(ActionEvent e) throws IOException{
+		openNewLiteratureTab();
+	}
+
 
 
 	@FXML
@@ -292,6 +340,7 @@ public class RootViewController implements Initializable {
 
 	}
 
+	// end Tabs ----------------------------------------------------------------------------------------------------------------
 
 
 	private void openFileUploadDialog(Literature literature, File file) throws IOException{
@@ -578,6 +627,32 @@ public class RootViewController implements Initializable {
 	}
 
 	@FXML
+	private void tabNewLiteratureCloseRequested(Event e){
+		e.consume();
+
+		YesNoDialogListener listener = new YesNoDialogListener() {
+
+			@Override
+			public void yes() {
+				removeTabWithFade(tabNewLiterature);
+			}
+
+			@Override
+			public void no() {
+				removeTabWithFade(tabNewLiterature);
+
+			}
+		};
+
+		try {
+			openYesNoDialog("Alert", "Are you sure you want to close? Any changes will not be saved.", listener);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+
+	}
+
+	@FXML
 	private void switchUserAction(ActionEvent e) throws IOException{
 
 		// Check to see if editor tab is open because we will need to ask to save
@@ -627,7 +702,7 @@ public class RootViewController implements Initializable {
 	}
 
 	private void removeTabWithFade(Tab tab){
-		FadeTransition ft = new FadeTransition(Duration.millis(150), tab.getContent());
+		FadeTransition ft = new FadeTransition(Duration.millis(200), tab.getContent());
 		ft.setFromValue(1.0);
 		ft.setToValue(0.0);
 		ft.setOnFinished(e -> {
@@ -638,17 +713,7 @@ public class RootViewController implements Initializable {
 		ft.play();
 	}
 
-	private void openTabWithFade(Tab tab){
-		FadeTransition ft = new FadeTransition(Duration.millis(500), tab.getContent());
-		ft.setFromValue(0.0);
-		ft.setToValue(1.0);
-		ft.setOnFinished(e -> {
 
-		});
-
-		ft.play();
-		this.tabPane.getTabs().add(tab);
-	}
 
 	private void openYesNoDialog(String title, String message, YesNoDialogListener listener) throws IOException{
 

@@ -10,8 +10,12 @@
     -fx-body-color: linear-gradient( to bottom, derive(-fx-color, 65.33898305084747%) 0%, derive(-fx-color, 37.389830508474574%) 50%, derive(-fx-color, 5.0%) 50.5%, derive(-fx-color, -10.0%) 100%);
 }
 
+#pdfLabel {
+	-fx-text-fill: black;
+}
+
 #pdfLabel:disabled {
-	-fx-opacity: 0.8;
+	-fx-opacity: 0.7;
 }
 
 .button, .toggle-button, .choice-box {

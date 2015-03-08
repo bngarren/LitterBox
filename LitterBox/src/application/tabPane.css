@@ -4,6 +4,7 @@
     /* -fx-tab-max-width: 4.583em; 55 */
     -fx-tab-min-height: 2em; /* 24 */
     -fx-tab-max-height: 2em; /* 24 */
+
 }
 
 .tab *.tab-label {
@@ -31,11 +32,27 @@
     -fx-background-radius: 2 2 0 0, 2 2 0 0, 2 2 0 0;
     -fx-background-insets: 0, 1, 2;
     -fx-background-insets: 0 5em 0 0, 1 5em 1 1, 2 5em 0 0;
-    /*-fx-background-radius: 5 5 0 0, 4 4 0 0, 3 3 0 0;*/ /*JDSHACK*/
-    /*-fx-background-radius: 0;*/
+	-fx-background-insets: 0, 1 1 0 1;
     -fx-padding: 0.083333em 0.5em 0.083333em 0.5em; /* 1 6 1 6 */
     -fx-text-fill: -fx-text-base-color;
     -fx-focus-color: transparent;
+    
+}
+
+.tab:selected {
+/*    -fx-background-color: white;*/
+
+/*    -fx-background-color: -fx-tab-border-color, -fx-inner-border, -fx-body-color;
+    -fx-background-radius: 5 5 0 0, 4 4 0 0, 3 3 0 0;
+    -fx-background-insets: 0, 1 1 0 1, 2 2 0 2;*/
+    /*-fx-background-color: -fx-tab-border-color, -fx-control-inner-background;*/ /*JDSHACK*/
+    -fx-background-radius: 2 2 0 0, 2 2 0 0, 2 2 0 0;
+	-fx-background-color: 
+        #C0CCC7,
+        linear-gradient(#F0FFF9, #C0CCC7);
+    -fx-background-insets: 0, 1 1 0 1;
+    /*-fx-background-radius: 5 5 0 0, 4 4 0 0;*/ /*JDSHACK*/
+    /*-fx-background-radius: 0;*/
 }
 
 .tab:top {
@@ -55,25 +72,10 @@
 }
 
 .tab:hover {
-    -fx-color: -fx-hover-base;
+    -fx-color: #F0FFF9;
 }
 
-.tab:selected {
-/*    -fx-background-color: white;*/
 
-/*    -fx-background-color: -fx-tab-border-color, -fx-inner-border, -fx-body-color;
-    -fx-background-radius: 5 5 0 0, 4 4 0 0, 3 3 0 0;
-    -fx-background-insets: 0, 1 1 0 1, 2 2 0 2;*/
-    /*-fx-background-color: -fx-tab-border-color, -fx-control-inner-background;*/ /*JDSHACK*/
-    -fx-background-radius: 2 2 0 0, 2 2 0 0, 2 2 0 0;
-	-fx-background-color: 
-        #C0CCC7,
-        linear-gradient(#F0FFF9, #C0CCC7);
-    -fx-background-insets: 0, 1 1 0 1;
-    /*-fx-background-radius: 5 5 0 0, 4 4 0 0;*/ /*JDSHACK*/
-    /*-fx-background-radius: 0;*/
-
-}
 
 
 .tab-pane *.tab-header-background {
@@ -91,6 +93,7 @@
 .tab-pane:top *.tab-header-area {
     -fx-background-insets: 0, 0 0 1 0;
     -fx-padding: 0.416667em 0.166667em 0.0em 0.833em; /* 5 2 0 10 */
+    -fx-padding: 0.416667em 0.166667em 0.0em 0.2em; /* overriden as 5 2 0 0 */
 }
 
 .tab-pane:bottom *.tab-header-area {

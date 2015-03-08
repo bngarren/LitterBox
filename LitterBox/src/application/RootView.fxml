@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.effect.*?>
 <?import javafx.scene.web.*?>
 <?import javafx.scene.*?>
 <?import javafx.geometry.*?>
@@ -43,7 +44,7 @@
       </HBox>
    </top>
    <center>
-      <TabPane fx:id="tabPane" stylesheets="@tabPane.css">
+      <TabPane fx:id="tabPane" stylesheets="@tabPane.css" tabClosingPolicy="ALL_TABS">
          <tabs>
             <Tab fx:id="tabHome" closable="false" text="Home">
                <content>
@@ -51,11 +52,23 @@
                      <items>
                         <VBox>
                            <children>
-                              <ToolBar prefWidth="200.0">
-                                <items>
-                                    <Label fx:id="lblYourLiterature" text="Your literature:" />
-                                </items>
-                              </ToolBar>
+                              <HBox nodeOrientation="LEFT_TO_RIGHT">
+                                 <children>
+                                    <Label fx:id="lblYourLiterature" prefWidth="140.0" text="Your literature:">
+                                       <font>
+                                          <Font name="Arial" size="11.0" />
+                                       </font>
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                       </padding>
+                                    </Label>
+                                    <Separator halignment="RIGHT" maxWidth="1.7976931348623157E308" orientation="VERTICAL" HBox.hgrow="ALWAYS" />
+                                    <Button fx:id="btnNewLiterature" mnemonicParsing="false" onAction="#btnNewLiteratureAction" stylesheets="@iconButton.css" HBox.hgrow="NEVER" />
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                                 </padding>
+                              </HBox>
                               <ListView fx:id="listView" focusTraversable="false" minWidth="300.0" VBox.vgrow="ALWAYS" />
                            </children>
                         </VBox>
@@ -114,6 +127,11 @@
               <content>
                   <BorderPane fx:id="tabEditorBorderPane" layoutX="412.0" layoutY="212.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
               </content>
+            </Tab>
+            <Tab fx:id="tabNewLiterature" onCloseRequest="#tabNewLiteratureCloseRequested" text="New Literature">
+               <content>
+                  <BorderPane fx:id="tabNewLiteratureBorderPane" prefHeight="200.0" prefWidth="200.0" />
+               </content>
             </Tab>
          </tabs>
          <BorderPane.margin>
