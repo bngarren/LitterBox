@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.shape.*?>
 <?import javafx.scene.media.*?>
 <?import javafx.scene.web.*?>
 <?import javafx.geometry.*?>
@@ -9,8 +14,48 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane fx:id="root" prefHeight="576.0" prefWidth="768.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.NewLiteratureController">
+<BorderPane fx:id="root" prefHeight="576.0" prefWidth="768.0" stylesheets="@application.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.NewLiteratureController">
    <center>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label layoutX="71.0" layoutY="200.0" opacity="0.5" text="Summary" />
+            <Button layoutX="654.0" layoutY="519.0" mnemonicParsing="false" text="Done" />
+            <TextField layoutX="69.0" layoutY="84.0" prefHeight="26.0" prefWidth="636.0" promptText="Title" />
+            <ComboBox layoutX="71.0" layoutY="128.0" prefHeight="5.0" prefWidth="308.0" />
+            <TextField layoutX="399.0" layoutY="127.0" prefHeight="27.0" prefWidth="136.0" promptText="Author" />
+            <HTMLEditor htmlText="&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body contenteditable=&quot;true&quot;&gt;&lt;/body&gt;&lt;/html&gt;" layoutX="70.0" layoutY="218.0" prefHeight="287.0" prefWidth="630.0" />
+            <ChoiceBox layoutX="553.0" layoutY="128.0" prefHeight="25.0" prefWidth="86.0" />
+            <ChoiceBox layoutX="650.0" layoutY="128.0" prefHeight="25.0" prefWidth="52.0" />
+            <Label layoutX="305.0" layoutY="22.0" opacity="0.5" text="New Literature">
+               <font>
+                  <Font name="System Bold" size="23.0" />
+               </font>
+            </Label>
+            <ImageView fx:id="tagIcon" layoutX="70.0" layoutY="519.0" onMouseClicked="#tagIconClicked">
+               <image>
+                  <Image url="@../assets/tag_icon_24.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </ImageView>
+            <AnchorPane fx:id="tagBox" layoutX="98.0" layoutY="362.0" opacity="0.74" prefHeight="150.0" prefWidth="250.0" visible="false">
+               <children>
+                  <VBox layoutY="2.0">
+                     <children>
+                        <TextField fx:id="txtTagBoxInput" layoutY="2.0" opacity="0.85" prefHeight="25.0" prefWidth="250.0">
+                           <VBox.margin>
+                              <Insets bottom="1.0" />
+                           </VBox.margin>
+                        </TextField>
+                        <ListView fx:id="tagListView" opacity="0.85" prefHeight="133.0" prefWidth="250.0" />
+                     </children>
+                     <padding>
+                        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                     </padding>
+                  </VBox>
+               </children>
+            </AnchorPane>
+         </children></AnchorPane>
    </center>
 </BorderPane>

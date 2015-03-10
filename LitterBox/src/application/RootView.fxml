@@ -48,7 +48,7 @@
          <tabs>
             <Tab fx:id="tabHome" closable="false" text="Home">
                <content>
-                  <SplitPane dividerPositions="0.5" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                  <SplitPane dividerPositions="0.4" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                      <items>
                         <VBox>
                            <children>
@@ -56,17 +56,32 @@
                                  <children>
                                     <Label fx:id="lblYourLiterature" prefWidth="140.0" text="Your literature:">
                                        <font>
-                                          <Font name="Arial" size="11.0" />
+                                          <Font name="Arial" size="12.0" />
                                        </font>
                                        <padding>
                                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                        </padding>
                                     </Label>
                                     <Separator halignment="RIGHT" maxWidth="1.7976931348623157E308" orientation="VERTICAL" HBox.hgrow="ALWAYS" />
-                                    <Button fx:id="btnNewLiterature" mnemonicParsing="false" onAction="#btnNewLiteratureAction" stylesheets="@iconButton.css" HBox.hgrow="NEVER" />
+                                    <TextField id="searchBox" fx:id="txtSearch" prefHeight="25.0" prefWidth="200.0">
+                                       <font>
+                                          <Font name="Arial" size="12.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets left="5.0" />
+                                       </HBox.margin>
+                                       <padding>
+                                          <Insets left="25.0" />
+                                       </padding>
+                                    </TextField>
+                                    <Button id="cancelSearchIcon" fx:id="btnCancelSearch" cancelButton="true" mnemonicParsing="false" onAction="#btnCancelSearchAction" stylesheets="@iconButton.css" visible="false" />
+                                    <Button fx:id="btnNewLiterature" mnemonicParsing="false" onAction="#btnNewLiteratureAction" stylesheets="@iconButton.css" HBox.hgrow="NEVER">
+                                       <HBox.margin>
+                                          <Insets right="5.0" />
+                                       </HBox.margin></Button>
                                  </children>
                                  <padding>
-                                    <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                                    <Insets bottom="2.0" left="2.0" right="2.0" top="4.0" />
                                  </padding>
                               </HBox>
                               <ListView fx:id="listView" focusTraversable="false" minWidth="300.0" VBox.vgrow="ALWAYS" />
@@ -74,12 +89,58 @@
                         </VBox>
                         <VBox minWidth="300.0">
                            <children>
-                              <Accordion fx:id="accordion" prefHeight="371.0" BorderPane.alignment="CENTER" VBox.vgrow="ALWAYS">
+                              <Accordion fx:id="accordion" BorderPane.alignment="CENTER" VBox.vgrow="ALWAYS">
                                 <panes>
                                   <TitledPane animated="false" text="Summary">
                                     <content>
-                                          <WebView fx:id="webViewSummary" layoutX="69.0" layoutY="65.0" minHeight="300.0" minWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="58.39999999915" AnchorPane.topAnchor="15.0" />
+                                          <VBox alignment="CENTER_LEFT" spacing="1.0">
+                                             <children>
+                                                <GridPane id="summaryInfoBox">
+                                                   <columnConstraints>
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                                                   </columnConstraints>
+                                                   <rowConstraints>
+                                                      <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                   </rowConstraints>
+                                                   <children>
+                                                      <Label id="summaryInfoBoxTitle" fx:id="lblLiteratureTitle" minWidth="550.0" textOverrun="WORD_ELLIPSIS" wrapText="true" HBox.hgrow="ALWAYS">
+                                                         <HBox.margin>
+                                                            <Insets left="5.0" />
+                                                         </HBox.margin>
+                                                         <font>
+                                                            <Font name="Arial Bold" size="18.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <Label id="summaryInfoBoxJournalTitle" fx:id="lblLiteratureJournalTitle" minWidth="200.0" GridPane.rowIndex="1">
+                                                         <font>
+                                                            <Font name="Arial Italic" size="13.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <ImageView GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+                                                         <image>
+                                                            <Image url="@../assets/down_arrow.png" />
+                                                         </image>
+                                                      </ImageView>
+                                                   </children>
+                                                   <VBox.margin>
+                                                      <Insets />
+                                                   </VBox.margin>
+                                                   <padding>
+                                                      <Insets bottom="5.0" left="9.0" right="5.0" top="8.0" />
+                                                   </padding>
+                                                </GridPane>
+                                                <WebView fx:id="webViewSummary" layoutX="69.0" layoutY="65.0" minHeight="300.0" minWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="58.39999999915" AnchorPane.topAnchor="15.0" VBox.vgrow="ALWAYS" />
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
+                                             </padding>
+                                          </VBox>
                                     </content>
+                                       <font>
+                                          <Font name="Arial" size="12.0" />
+                                       </font>
                                   </TitledPane>
                                   <TitledPane animated="false" text="Options">
                                        <content>
@@ -113,6 +174,9 @@
                                              </children>
                                           </HBox>
                                        </content>
+                                       <font>
+                                          <Font name="Arial" size="12.0" />
+                                       </font>
                                   </TitledPane>
                                 </panes>
                               </Accordion>

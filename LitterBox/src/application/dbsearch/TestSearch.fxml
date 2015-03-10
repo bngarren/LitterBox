@@ -1,8 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml/1">
-	<!-- TODO Add Nodes -->
-</BorderPane>
 
+<BorderPane prefHeight="768.0" prefWidth="1024.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="application.dbsearch.TestSearchController">
+   <center>
+      <ListView fx:id="listView" BorderPane.alignment="CENTER" />
+   </center>
+   <top>
+      <HBox>
+         <children>
+            <TextField fx:id="txtSearch" promptText="Search" BorderPane.alignment="CENTER">
+               <HBox.margin>
+                  <Insets right="5.0" />
+               </HBox.margin>
+            </TextField>
+            <Button fx:id="btnCancelSearch" cancelButton="true" mnemonicParsing="false" onAction="#btnCancelSearchAction" text="X" />
+            <ProgressIndicator fx:id="progress" opacity="0.5" prefHeight="25.0" prefWidth="25.0" visible="false">
+               <HBox.margin>
+                  <Insets left="20.0" />
+               </HBox.margin>
+            </ProgressIndicator>
+         </children>
+         <padding>
+            <Insets bottom="5.0" left="5.0" top="5.0" />
+         </padding>
+      </HBox>
+   </top>
+   <right>
+      <TextArea fx:id="console" editable="false" promptText="Console" wrapText="true" BorderPane.alignment="CENTER" />
+   </right>
+</BorderPane>

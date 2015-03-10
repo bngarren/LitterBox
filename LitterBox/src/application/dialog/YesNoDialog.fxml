@@ -14,7 +14,7 @@
             <Font name="Arial" size="12.0" />
          </font>
       </Label>
-      <HBox alignment="CENTER" layoutX="75.0" layoutY="100.0" spacing="10.0" AnchorPane.leftAnchor="75.0" AnchorPane.rightAnchor="75.0">
+      <HBox alignment="CENTER" layoutX="75.0" layoutY="103.0" spacing="10.0" AnchorPane.leftAnchor="75.0" AnchorPane.rightAnchor="75.0">
          <children>
             <Button fx:id="btnYes" layoutX="75.0" layoutY="124.0" mnemonicParsing="false" onAction="#btnYesAction" text="Yes" />
             <Button fx:id="btnNo" mnemonicParsing="false" onAction="#btnNoAction" text="No" />

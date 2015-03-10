@@ -16,18 +16,24 @@ public class LiteratureHeadingListCell extends ListCell<LiteratureHeading> {
 
 		super.updateItem(heading, b);
 
-		if (heading != null){
+		if (b){
+			setText(null);
+			setGraphic(null);
+		} else {
 
-			Label label = new Label(heading.getTitle());
+			if (heading != null){
 
-			if (heading.isPDFAvailable()){
-				Image image = new Image(getClass().getResourceAsStream("/assets/pdf_icon.gif"));
-				label.setGraphic(new ImageView(image));
-				label.setContentDisplay(ContentDisplay.LEFT);
-				setPadding(new Insets(5, 10, 5, 5));
+				Label label = new Label(heading.getTitle());
+
+				if (heading.isPDFAvailable()){
+					Image image = new Image(getClass().getResourceAsStream("/assets/pdf_icon.gif"));
+					label.setGraphic(new ImageView(image));
+					label.setContentDisplay(ContentDisplay.LEFT);
+					setPadding(new Insets(5, 10, 5, 5));
+				}
+
+				setGraphic(label);
 			}
-
-			setGraphic(label);
 		}
 	}
 

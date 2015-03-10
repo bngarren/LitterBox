@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -18,7 +19,9 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import application.clientmanager.ClientManager;
 
 import com.db.ClientDAO;
 import com.db.DAOFactory;
@@ -48,6 +51,11 @@ public class LoginController implements Initializable {
 			login(e);
 		}
 
+	}
+
+	@FXML
+	private void btnCloseClicked(MouseEvent e){
+		Platform.exit();
 	}
 
 	private void login(Event e) throws IOException{
@@ -83,10 +91,13 @@ public class LoginController implements Initializable {
 
 			Parent parent = loader.load();
 
-			// Get the controller so that we can pass it the client who is logging in
 			RootViewController controller = (RootViewController) loader.getController();
+			//controller.setClient(client);
 
-			controller.setClient(client);
+			ClientManager cm = ClientManager.INSTANCE;
+
+			cm.setListener(controller);
+			cm.setClient(client);
 
 			Scene scene = new Scene(parent);
 			Stage stage = new Stage();

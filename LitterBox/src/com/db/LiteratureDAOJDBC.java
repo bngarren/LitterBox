@@ -21,6 +21,8 @@ public class LiteratureDAOJDBC implements LiteratureDAO {
 	private static final String SQL_INSERT = "INSERT INTO literature (title, date_published, summary, isPDFAvailable, pdfFilename, owner) VALUES (?, ?, ?, ?, ?, ?)";
 	private static final String SQL_UPDATE =
 			"UPDATE literature SET title = ?, date_published = ?, summary = ?, isPDFAvailable = ?, pdfFilename = ?, owner = ? WHERE id = ?";
+	private static final String SQL_SEARCH_TITLE_AND_SUMMARY_FOR_STRING = "SELECT * FROM literature WHERE MATCH (title, summary) AGAINST (? IN BOOLEAN MODE)";
+	private static final String SQL_SEARCH_TITLE_AND_SUMMARY_FOR_STRING_BY_OWNER = "SELECT * FROM literature WHERE MATCH (title, summary) AGAINST (? IN BOOLEAN MODE) AND owner = ?";
 
 	private DAOFactory daoFactory;
 
@@ -163,6 +165,42 @@ public class LiteratureDAOJDBC implements LiteratureDAO {
 
 	}
 
+	@Override
+	public List<Literature> searchTitleAndSummaryFor(String s, String owner) {
+		return searchTitleAndSummary(SQL_SEARCH_TITLE_AND_SUMMARY_FOR_STRING_BY_OWNER, s, owner);
+	}
+
+	@Override
+	public List<Literature> searchTitleAndSummaryFor(String s) {
+		return searchTitleAndSummary(SQL_SEARCH_TITLE_AND_SUMMARY_FOR_STRING, s);
+	}
+
+	private List<Literature> searchTitleAndSummary(String sql, Object... values){
+		List<Literature> result = new ArrayList<Literature>();
+
+		String inputText = (String) values[0];
+
+		if (inputText.trim().length() == 0 || inputText.trim().isEmpty()){
+			System.err.println("Cannot search literature titles with an empty string");
+			return result;
+		} else {
+			values[0] = inputText + "*";
+		}
+
+		try (
+				Connection connection = daoFactory.getConnection();
+				PreparedStatement stmt = DAOUtil.prepareStatement(connection, sql, false, values);
+				ResultSet resultSet = stmt.executeQuery();
+				)	{
+			while (resultSet.next()){
+				result.add(map(resultSet));
+			}
+		}  catch (SQLException e) {
+			throw new LBException(e);
+		}
+		return result;
+	}
+
 
 	// Helpers ------------------------------------------------------------------------------------
 
@@ -184,5 +222,9 @@ public class LiteratureDAOJDBC implements LiteratureDAO {
 
 		return literature;
 	}
+
+
+
+
 
 }

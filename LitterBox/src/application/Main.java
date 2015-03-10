@@ -36,7 +36,7 @@ public class Main extends Application {
 		stage.setResizable(false);
 		stage.setTitle("LitterBox - Login");
 		stage.centerOnScreen();
-		stage.initStyle(StageStyle.UTILITY);
+		stage.initStyle(StageStyle.TRANSPARENT);
 		stage.show();
 	}
 

@@ -81,6 +81,12 @@ public class DAOTest {
 				clients.forEach(action -> System.out.println(action.toString()));
 				break;
 
+			case "search-lit":
+				List<Literature> literatureByTitleSearch = literatureDAO.searchTitleAndSummaryFor(command[1]);
+				literatureByTitleSearch.forEach(action -> System.out.println(action.getTitle()));
+
+				break;
+
 			case "quit":
 				System.exit(0);
 

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<fx:root prefHeight="150.0" prefWidth="250.0" type="AnchorPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.tag.TagBoxController">
+   <children>
+      <VBox layoutY="2.0">
+         <children>
+            <TextField layoutY="2.0" prefHeight="25.0" prefWidth="250.0">
+               <VBox.margin>
+                  <Insets bottom="1.0" />
+               </VBox.margin>
+            </TextField>
+            <ListView prefHeight="133.0" prefWidth="250.0" />
+         </children>
+         <padding>
+            <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+         </padding>
+      </VBox>
+   </children>
+</fx:root>

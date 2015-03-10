@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.effect.*?>
 <?import javafx.scene.text.*?>
@@ -26,10 +27,18 @@
          </font>
       </Button>
       <Label fx:id="lblMessage" alignment="CENTER" layoutX="41.0" layoutY="90.0" prefHeight="17.0" prefWidth="212.0" textFill="#bf0000" />
-      <ImageView fitHeight="87.0" fitWidth="87.0" layoutX="103.0" layoutY="3.0">
+      <ImageView fitHeight="82.0" fitWidth="90.0" layoutX="101.0" layoutY="14.0">
          <image>
-            <Image url="@../assets/logo_128.png" />
+            <Image url="@../assets/logo.png" />
          </image>
+      </ImageView>
+      <ImageView layoutX="281.0" layoutY="2.0" onMouseClicked="#btnCloseClicked" opacity="0.1">
+         <image>
+            <Image url="@../assets/cancel_icon.png" />
+         </image>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
       </ImageView>
    </children>
 </AnchorPane>

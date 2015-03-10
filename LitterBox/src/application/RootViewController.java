@@ -21,6 +21,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Accordion;
+import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -32,6 +33,7 @@ import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TabPane.TabClosingPolicy;
+import javafx.scene.control.TextField;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseButton;
@@ -44,6 +46,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import javafx.util.Duration;
+import application.clientmanager.ClientManagerListener;
 import application.dialog.UploadDialogController;
 import application.dialog.UploadDialogListener;
 import application.dialog.YesNoDialogController;
@@ -54,9 +57,8 @@ import com.db.LiteratureDAO;
 import com.model.Client;
 import com.model.Literature;
 import com.model.LiteratureHeading;
-import com.server.LBServer;
 
-public class RootViewController implements Initializable {
+public class RootViewController implements Initializable, ClientManagerListener {
 
 	private Stage stage;
 	@FXML private BorderPane root;
@@ -67,16 +69,30 @@ public class RootViewController implements Initializable {
 	@FXML private BorderPane tabEditorBorderPane;
 	@FXML private BorderPane tabNewLiteratureBorderPane;
 
+	// ---------------------------------------------------------------------------
 
-	@FXML private ProgressIndicator progressIndicator;
-	@FXML private Accordion accordion;
+	// List view area
 	@FXML private Label lblYourLiterature;
 	@FXML private ListView<LiteratureHeading> listView;
-	@FXML private Menu menuClient;
-	@FXML private Label lblUser;
+	@FXML private TextField txtSearch;
+	@FXML private Button btnCancelSearch;
+
+	// ---------------------------------------------------------------------------
+
+	// Accordion
+	@FXML private Accordion accordion;
+	@FXML private Label lblLiteratureTitle;
+	@FXML private Label lblLiteratureJournalTitle;
 	@FXML private WebView webViewSummary;
 	@FXML private ContextMenu webViewSummaryContextMenu;
 	@FXML private Label lblPDFAvailable;
+
+	// ---------------------------------------------------------------------------
+
+	@FXML private ProgressIndicator progressIndicator;
+	@FXML private Menu menuClient;
+	@FXML private Label lblUser;
+
 
 	private Client client;
 	private URL clientServerDirectory;
@@ -107,9 +123,23 @@ public class RootViewController implements Initializable {
 		// What to do when a new selection is made
 		listView.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
 
-			populateAccordionWithLiteratureById(listView.getSelectionModel().getSelectedItem().getId());
+			if (!listView.getSelectionModel().isEmpty()){
+
+				LiteratureHeading selectedLiterature = listView.getSelectionModel().getSelectedItem();
+
+				if (selectedLiterature == null){
+					System.out.println("RootViewController: ListView's selected literature heading is null");
+					return;
+				}
+
+				int selectedId = selectedLiterature.getId();
+
+				populateAccordionWithLiteratureById(listView.getSelectionModel().getSelectedItem().getId());
+			}
 
 		});
+
+		initSearchField();
 
 		// Start off with accordion hidden
 		accordion.setVisible(false);
@@ -165,14 +195,80 @@ public class RootViewController implements Initializable {
 
 	}
 
-	private void fillListView(){
-		// First get a list of literature by owner
-		// Then get literature heading for each literature
+	// Client manager listener implementation -------------------------------------------
 
+	@Override
+	public void processingNewClient(Client client) {
+		this.client = client;
+
+	}
+
+	@Override
+	public void clientLoadingComplete(Client client) {
+		this.client = client;
+
+		System.out.println("RootViewController: received fully loaded client: " + this.client.getUsername());
+
+		lblYourLiterature.setText(this.client.getUsername() +"'s literature:");
+
+		// Fill the list view of client's literature
 		List<Literature> listLiterature = literatureDAO.listByOwner(client.getUsername());
+		fillListView(listLiterature);
+
+
+		// Update user label
+		this.menuClient.setText(client.getUsername());
+
+	}
+
+	// ----------------------------------------------------------------------------------
+
+
+	// Search function ------------------------------------------------------------------
+
+	private void initSearchField(){
+
+		txtSearch.textProperty().addListener(change -> {
+			String text = txtSearch.textProperty().getValue();
+
+			if (text == null || text.isEmpty()){
+				this.cancelSearch();
+				return;
+			}
+
+			List<Literature> matches = literatureDAO.searchTitleAndSummaryFor(text, client.getUsername());
+			this.fillListView(matches);
+			this.btnCancelSearch.setVisible(true);
+		});
+
+	}
+
+	private void cancelSearch(){
+		List<Literature> listLiterature = literatureDAO.listByOwner(client.getUsername());
+		fillListView(listLiterature);
+		btnCancelSearch.setVisible(false);
+	}
+
+	@FXML
+	private void btnCancelSearchAction(ActionEvent e){
+		txtSearch.setText("");
+		cancelSearch();
+	}
+
+	// end search stuff -----------------------------------------------------------------
+
+
+
+	/**
+	 * Will create LiteratureHeading objects for each Literature item given
+	 *
+	 * @param list - List of Literature object with which to populate the ListView
+	 */
+	private void fillListView(List<Literature> list){
+
 		List<LiteratureHeading> headings = new ArrayList<LiteratureHeading>();
 
-		listLiterature.forEach(lit -> headings.add(lit.getLiteratureHeading()));
+		list.forEach(lit -> headings.add(lit.getLiteratureHeading()));
 
 		ObservableList<LiteratureHeading> data = FXCollections.observableArrayList(headings);
 		listView.setItems(data);
@@ -228,6 +324,9 @@ public class RootViewController implements Initializable {
 			System.out.println("\tPopulating accordion with literature: " + currentLiterature.getTitle());
 
 			accordion.setExpandedPane(accordion.getPanes().get(0));
+
+			lblLiteratureTitle.setText(currentLiterature.getTitle());
+			lblLiteratureJournalTitle.setText("New England Journal of Medicine");
 
 			String htmlStart = "<!DOCTYPE html><HTML><BODY style='font-family:arial; font-size:13px;'>";
 			String htmlEnd = "</BODY></HTML>";
@@ -748,38 +847,6 @@ public class RootViewController implements Initializable {
 	public Client getClient() {
 		return client;
 	}
-
-
-	public void setClient(Client client){
-		this.client = client;
-
-		String clientDirectory = "/" + client.getServerDirectory();
-
-		URL urlToClientDirectory = LBServer.INSTANCE.getURLOfClientDirectory(clientDirectory);
-
-		if (urlToClientDirectory != null){
-			if (LBServer.INSTANCE.doesClientDirectoryExist(urlToClientDirectory)){
-				this.clientServerDirectory = urlToClientDirectory;
-				System.out.println(client.getUsername() + "'s server directory URL is = " + clientServerDirectory.toExternalForm());
-			} else {
-				System.err.println("Could not find server directory for " + client.getUsername() + " at " + urlToClientDirectory);
-			}
-		} else {
-			System.err.println("Could not resolve URL to server directory for " + client.getUsername() + " at " + urlToClientDirectory);
-		}
-
-
-		lblYourLiterature.setText(this.client.getUsername() +"'s literature:");
-
-		// Fill the list view of client's literature
-		fillListView();
-
-
-		// Update user label
-		this.menuClient.setText(client.getUsername());
-	}
-
-
 
 
 

@@ -18,4 +18,8 @@ public interface LiteratureDAO {
 
 	public void update(Literature literature);
 
+	public List<Literature> searchTitleAndSummaryFor(String s);
+
+	public List<Literature> searchTitleAndSummaryFor(String s, String owner);
+
 }
