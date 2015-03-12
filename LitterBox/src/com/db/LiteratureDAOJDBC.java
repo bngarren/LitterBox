@@ -208,9 +208,9 @@ public class LiteratureDAOJDBC implements LiteratureDAO {
 
 
 	/**
-	 * Map the current row of the given ResultSet to an User.
-	 * @param resultSet The ResultSet of which the current row is to be mapped to an User.
-	 * @return The mapped User from the current row of the given ResultSet.
+	 * Map the current row of the given ResultSet to a Literature.
+	 * @param resultSet The ResultSet of which the current row is to be mapped to a Literature.
+	 * @return The mapped Literature from the current row of the given ResultSet.
 	 * @throws SQLException If something fails at database level.
 	 */
 	private static Literature map(ResultSet resultSet) throws SQLException {

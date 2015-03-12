@@ -46,6 +46,10 @@ public abstract class DAOFactory {
 		return new ClientDAOJDBC(this);
 	}
 
+	public JournalDAO getJournalDAO(){
+		return new JournalDAOJDBC(this);
+	}
+
 
 
 }
